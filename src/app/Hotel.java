@@ -41,7 +41,7 @@ public class Hotel {
             opcion = Integer.parseInt(sc.nextLine().trim());
 
             switch(opcion){
-                case 1 -> imprimir("pendinete");
+                case 1 -> consultarTodasLasHabitaciones();
                 case 2 -> imprimir("pendiente");
                 case 3 -> imprimir("pendiente");
                 case 4 -> imprimir("pendiente");
@@ -67,10 +67,11 @@ public class Hotel {
                 } else {
                     estado = "Ocupada";
                 }
-                imprimir("Habitacion # " + habitaciones[j] " ,piso " + i+1);
+                imprimir("Habitacion # " + habitaciones[i][j] + " ,piso " + (i+1));
                 imprimir("Tipo: " + tipo[i]);
                 imprimir("Precio: " + precio[i]);
                 imprimir("Estado de la habitacion: " + estado);
+                imprimir("_______________________________");
             }
         }
 

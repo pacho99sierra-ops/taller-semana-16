@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Scanner;
 
-public class Main {
+public class Hotel {
 
     private static final DateTimeFormatter FORMATO_FECHA =
             DateTimeFormatter.ofPattern("dd/MM/uuuu HH:mm")
@@ -13,17 +13,17 @@ public class Main {
 
     static Scanner sc = new Scanner(System.in);
 
-    int[][] habitaciones = {
+    static int[][] habitaciones = {
             {101, 102, 103, 104, 105},
             {201, 202, 203, 204, 205},
             {301, 302, 303, 304, 305}
     };
 
-    LocalDateTime[][] fechasIngreso = new LocalDateTime[3][5];
-    String[][] nombresHuespedes = new String[3][5];
+    static LocalDateTime[][] fechasIngreso = new LocalDateTime[3][5];
+    static String[][] nombresHuespedes = new String[3][5];
 
     static String[] tipo = {"ESTANDAR", "PREMIER", "SUITE"};
-    static int[] precio = {300000, 500000, 1000000}
+    static int[] precio = {300000, 500000, 1000000};
 
 
     public static void main(String[] args) {
@@ -56,5 +56,14 @@ public class Main {
 
     public static void imprimir(String mensaje) {
         System.out.println(mensaje);
+    }
+
+    public static void consultarTodasLasHabitaciones(){
+        for(int i = 0; i < 3; i++){
+            for (int j = 0; j < 5; j++){
+
+            }
+        }
+
     }
 }

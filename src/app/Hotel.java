@@ -42,7 +42,7 @@ public class Hotel {
 
             switch(opcion){
                 case 1 -> consultarTodasLasHabitaciones();
-                case 2 -> imprimir("pendiente");
+                case 2 -> consultarHabitacionPorNumero();
                 case 3 -> imprimir("pendiente");
                 case 4 -> imprimir("pendiente");
                 case 5 -> imprimir("pendiente");
@@ -61,19 +61,52 @@ public class Hotel {
     public static void consultarTodasLasHabitaciones(){
         for(int i = 0; i < 3; i++){
             for (int j = 0; j < 5; j++){
-                String estado;
-                if (fechasIngreso[i][j] == null) {
-                    estado = "Libre";
-                } else {
-                    estado = "Ocupada";
-                }
-                imprimir("Habitacion # " + habitaciones[i][j] + " ,piso " + (i+1));
-                imprimir("Tipo: " + tipo[i]);
-                imprimir("Precio: " + precio[i]);
-                imprimir("Estado de la habitacion: " + estado);
-                imprimir("_______________________________");
+                int fila = i;
+                int columna = j;
+                mostrarHabitacion(fila, columna);
             }
         }
 
     }
+
+    public static void consultarHabitacionPorNumero(){
+        System.out.print("Ingrese el numero de la habitacion: ");
+        int habitacion = Integer.parseInt(sc.nextLine().trim());
+
+        boolean habitacionExiste = false;
+
+        for(int i = 0; i < 3; i++){
+            for (int j = 0; j < 5; j++){
+                if (habitacion == habitaciones[i][j]){
+                    habitacionExiste = true;
+                    int fila = i;
+                    int columna = j;
+                    mostrarHabitacion(fila, columna);
+                }
+            }
+        }
+        if (!habitacionExiste){
+            imprimir("Habitacion " + habitacion + " no existe.");
+        }
+    }
+
+    public static void mostrarHabitacion (int fila, int columna){
+
+
+                String estado;
+                if (fechasIngreso[fila][columna] == null) {
+                    estado = "Libre";
+                } else {
+                    estado = "Ocupada";
+                }
+                imprimir("Habitacion # " + habitaciones[fila][columna] + " ,piso " + (fila+1));
+                imprimir("Tipo: " + tipo[fila]);
+                imprimir("Precio: " + precio[fila]);
+                imprimir("Estado de la habitacion: " + estado);
+                imprimir("_______________________________");
+
+    }
 }
+
+
+

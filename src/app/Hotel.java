@@ -43,7 +43,7 @@ public class Hotel {
             switch(opcion){
                 case 1 -> consultarTodasLasHabitaciones();
                 case 2 -> consultarHabitacionPorNumero();
-                case 3 -> imprimir("pendiente");
+                case 3 -> consultarDisponibilidadPorTipo();
                 case 4 -> imprimir("pendiente");
                 case 5 -> imprimir("pendiente");
                 case 0 -> imprimir("Hasta pronto.");
@@ -105,6 +105,40 @@ public class Hotel {
                 imprimir("Estado de la habitacion: " + estado);
                 imprimir("_______________________________");
 
+    }
+
+    public static void consultarDisponibilidadPorTipo(){
+        imprimir("Ingrese el tipo de la habitacion: ESTANDAR, PREMIER o SUITE ");
+        String tipoBuscado = sc.nextLine().trim().toUpperCase();
+
+        int fila = obtenerFilaTipo(tipoBuscado);
+
+        if (fila == -1){
+            imprimir("Tipo de la habitacion " + tipoBuscado + " no existe.");
+            return;
+        }
+
+        boolean habitacionExiste = false;
+
+        for (int j = 0; j < 5; j++){
+            if (fechasIngreso[fila][j] == null) {
+                mostrarHabitacion(fila, j);
+                habitacionExiste = true;
+            }
+
+        }
+        if (!habitacionExiste){
+            imprimir("No hay habitaciones disponibles del tipo: " +  tipoBuscado);
+        }
+    }
+
+    public static int obtenerFilaTipo(String tipoBuscado){
+            for (int i = 0; i < 3; i++){
+                if (tipo[i].equals(tipoBuscado)){
+                    return i;
+                }
+            }
+            return -1;
     }
 }
 

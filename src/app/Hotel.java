@@ -61,7 +61,16 @@ public class Hotel {
     public static void consultarTodasLasHabitaciones(){
         for(int i = 0; i < 3; i++){
             for (int j = 0; j < 5; j++){
-
+                String estado;
+                if (fechasIngreso[i][j] == null) {
+                    estado = "Libre";
+                } else {
+                    estado = "Ocupada";
+                }
+                imprimir("Habitacion # " + habitaciones[j] " ,piso " + i+1);
+                imprimir("Tipo: " + tipo[i]);
+                imprimir("Precio: " + precio[i]);
+                imprimir("Estado de la habitacion: " + estado);
             }
         }
 

@@ -45,7 +45,7 @@ public class Hotel {
                 case 1 -> consultarTodasLasHabitaciones();
                 case 2 -> consultarHabitacionPorNumero();
                 case 3 -> consultarDisponibilidadPorTipo();
-                case 4 -> imprimir("Fecha leida: " + leerFechas("Fecha (dd/MM/yyyy HH:mm): "));
+                case 4 -> realizarCheckIn();
                 case 5 -> imprimir("pendiente");
                 case 0 -> imprimir("Hasta pronto.");
                 default -> imprimir("Opcion no valida.");
@@ -182,6 +182,46 @@ public class Hotel {
         }while (fecha == null);
         return fecha;
 
+    }
+
+    public static void realizarCheckIn(){
+        String nombre;
+        int fila;
+       do {
+           imprimir("Ingrese el nombre del huesped a registrar:");
+           nombre = sc.nextLine().trim();
+
+           if (nombre.isEmpty()) {
+               imprimir("Ingrese un nombre valido.");
+           }
+       }while (nombre.isEmpty());
+
+        do {
+            imprimir("Ingrese el tipo de la habitacion: ESTANDAR, PREMIER o SUITE ");
+            String tipoBuscado = sc.nextLine().trim().toUpperCase();
+            fila = obtenerFilaTipo(tipoBuscado);
+
+            if (fila == -1) {
+                imprimir("Tipo de habitacion no disponible");
+            }continue;
+        }while (fila == -1);
+        int columna = -1;
+        for (int j = 0; j < 5; j++) {
+            if (fechasIngreso[fila][j] == null){
+                columna = j;
+                break;
+            }
+        }
+        if  (columna == -1){
+            imprimir("No habitaciones de este tipo disponibles.");
+            return;
+        }
+        LocalDateTime fechaIngreso = leerFechas("Fecha de ingreso (dd/MM/yyyy HH:mm): ");
+
+        fechasIngreso [fila][columna] = fechaIngreso;
+        nombresHuespedes [fila][columna]  = nombre;
+
+        imprimir("Check-In exitoso. Habitacion " + habitaciones[fila][columna] + " asignada a " + nombre);
     }
 }
 

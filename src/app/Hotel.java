@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Scanner;
 import java.time.YearMonth;
+import java.time.Duration;
+import java.time.LocalTime;
 
 public class Hotel {
 
@@ -46,7 +48,7 @@ public class Hotel {
                 case 2 -> consultarHabitacionPorNumero();
                 case 3 -> consultarDisponibilidadPorTipo();
                 case 4 -> realizarCheckIn();
-                case 5 -> imprimir("pendiente");
+                case 5 -> realizarCheckOut();
                 case 0 -> imprimir("Hasta pronto.");
                 default -> imprimir("Opcion no valida.");
             }
@@ -173,7 +175,7 @@ public class Hotel {
     public static LocalDateTime leerFechas(String mensaje){
         LocalDateTime fecha;
         do{
-            imprimir("Ingrese la fecha en formato dd/MM/yyyy HH:mm");
+            System.out.print(mensaje);
             String texto = sc.nextLine().trim();
             fecha = validarFecha(texto);
             if (fecha == null){
@@ -222,6 +224,70 @@ public class Hotel {
         nombresHuespedes [fila][columna]  = nombre;
 
         imprimir("Check-In exitoso. Habitacion " + habitaciones[fila][columna] + " asignada a " + nombre);
+    }
+
+    public static long calcularNoches(LocalDateTime fechaIngreso, LocalDateTime fechaSalida){
+        LocalDateTime inicioDiaIngreso = fechaIngreso.toLocalDate().atStartOfDay();
+        LocalDateTime inicioDiaSalida = fechaSalida.toLocalDate().atStartOfDay();
+        long noches = Duration.between(inicioDiaIngreso, inicioDiaSalida).toDays();
+
+        if (fechaSalida.toLocalTime().isAfter(LocalTime.of(13, 0))){
+            noches++;
+        }
+        if (noches<1){
+            noches = 1;
+        }
+        return noches;
+    }
+
+    public static void realizarCheckOut (){
+        int fila = -1;
+        int columna = -1;
+        int habitacion;
+        imprimir("Ingrese la habitacion de la cual van a hacer el check-out: ");
+        habitacion = Integer.parseInt(sc.nextLine().trim());
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (habitacion == habitaciones[i][j]){
+                fila = i;
+                columna = j;
+                }
+            }
+        }
+        if (fila == -1) {
+            imprimir("La habitacion " + habitacion + " no existe.");
+            return;
+        }
+
+        if (fechasIngreso[fila][columna] == null){
+            imprimir("La habitacion " + habitacion + " esta vacia.");
+            return;
+        }
+        LocalDateTime fechaIngreso = fechasIngreso[fila][columna];
+        LocalDateTime fechaSalida;
+        do {
+            fechaSalida = leerFechas("Fecha de salida (dd/MM/yyyy HH:mm): ");
+            if (!fechaSalida.isAfter(fechaIngreso)) {
+                imprimir("La fecha de salida debe ser posterior a la de entarda.");
+            }
+        } while (!fechaSalida.isAfter(fechaIngreso));
+
+        long noches = calcularNoches(fechaIngreso, fechaSalida);
+        long cobroNoches = noches * precio[fila];
+
+        imprimir("=====Factura=====");
+        imprimir("Nombre huesped: " + nombresHuespedes[fila][columna]);
+        imprimir("Habitacion: " + habitacion);
+        imprimir("Tipo: " + tipo[fila]);
+        imprimir("Fecha de ingreso: " + FORMATO_FECHA.format(fechaIngreso));
+        imprimir("Fecha de salida: " + FORMATO_FECHA.format(fechaSalida));
+        imprimir("Noches: " + noches);
+        imprimir("Valor por noche: " + precio[fila]);
+        imprimir("Cobro noches: " + cobroNoches);
+
+        fechasIngreso[fila][columna] = null;
+        nombresHuespedes[fila][columna] = null;
     }
 }
 

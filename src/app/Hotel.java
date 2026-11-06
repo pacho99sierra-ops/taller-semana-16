@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Scanner;
+import java.time.YearMonth;
 
 public class Hotel {
 
@@ -44,14 +45,12 @@ public class Hotel {
                 case 1 -> consultarTodasLasHabitaciones();
                 case 2 -> consultarHabitacionPorNumero();
                 case 3 -> consultarDisponibilidadPorTipo();
-                case 4 -> imprimir("pendiente");
+                case 4 -> imprimir("Fecha leida: " + leerFechas("Fecha (dd/MM/yyyy HH:mm): "));
                 case 5 -> imprimir("pendiente");
                 case 0 -> imprimir("Hasta pronto.");
                 default -> imprimir("Opcion no valida.");
             }
         }while (opcion != 0);
-
-
     }
 
     public static void imprimir(String mensaje) {
@@ -139,6 +138,50 @@ public class Hotel {
                 }
             }
             return -1;
+    }
+
+    private static LocalDateTime validarFecha(String texto) {
+        // Exige dos dígitos para día, mes, hora y minuto; y cuatro para el año.
+        if (!texto.matches("\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2}")) {
+            return null;
+        }
+
+        // Separa los números usando /, espacio y : como separadores.
+        Scanner partesFecha = new Scanner(texto);
+        partesFecha.useDelimiter("[/: ]");
+        int dia = partesFecha.nextInt();
+        int mes = partesFecha.nextInt();
+        int anio = partesFecha.nextInt();
+        int hora = partesFecha.nextInt();
+        int minuto = partesFecha.nextInt();
+        partesFecha.close();
+
+        // Revisa los rangos básicos de año, mes, día y hora.
+        if (anio < 1 || mes < 1 || mes > 12 || dia < 1 || hora > 23 || minuto > 59) {
+            return null;
+        }
+
+        // Obtiene cuántos días tiene ese mes; febrero puede tener 28 o 29.
+        if (dia > YearMonth.of(anio, mes).lengthOfMonth()) {
+            return null;
+        }
+
+        // Convierte el texto validado en una fecha y hora.
+        return LocalDateTime.parse(texto, FORMATO_FECHA);
+    }
+
+    public static LocalDateTime leerFechas(String mensaje){
+        LocalDateTime fecha;
+        do{
+            imprimir("Ingrese la fecha en formato dd/MM/yyyy HH:mm");
+            String texto = sc.nextLine().trim();
+            fecha = validarFecha(texto);
+            if (fecha == null){
+                imprimir("El formato de fecha es invalido");
+            }
+        }while (fecha == null);
+        return fecha;
+
     }
 }
 
